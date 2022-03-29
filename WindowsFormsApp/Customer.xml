@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="Customer" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <alias>
+    <typeAlias alias="Customer" type="WindowsFormsApp.Infrastructure.Models.Customer, WindowsFormsApp"/>
+  </alias>
+
+  <!--Mapping-->
+  <resultMaps>
+    <resultMap id="CustomerResult" class="Customer">
+      <result property="Id" column="Id"/>
+      <result property="Name" column="Name"/>
+    </resultMap>
+  </resultMaps>
+
+  <!--SQL-->
+  <statements>
+    <!-- SELECT文-->
+    <select id="GetCustomerById" resultClass="Customer" parameterClass="System.String">
+      select
+      Id, Name from Customer
+      where Id = #id#
+    </select>
+
+    <!--Select All-->
+    <select id="GetCustomerList" resultMap="CustomerResult">
+      select * from Customer
+    </select>
+
+    <!--Insert-->
+    <insert id="InsertCustomer" parameterClass="Customer">
+      insert into Customer
+        (Id, Name)
+      values
+        (#Id#, #Name#)
+    </insert>
+
+    <!--Update-->
+    <update id="UpdateCustomer" parameterClass="Customer">
+      update Customer
+      set Name = #Name#
+      where Id = #Id#
+    </update>
+
+    <!--Delete-->
+    <delete id="DeleteCustomer" parameterClass="System.String">
+      delete from Customer
+      where Id = #Id#
+    </delete>
+
+  </statements>
+</sqlMap>
