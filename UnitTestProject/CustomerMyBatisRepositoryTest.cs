@@ -73,7 +73,7 @@ namespace UnitTestProject
             var list = await _customerRepository.GetCustomers();
 
             // Assertion
-            Assert.IsTrue(list.Count == 3);
+            Assert.IsTrue(list.Count == 3 + 6); // テスト用3, 初期値6
         }
 
 

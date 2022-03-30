@@ -8,5 +8,6 @@ namespace WindowsFormsApp.Applications.CustomerService
 {
     public interface ICustomerService
     {
+        Task<List<CustomerDto>> GetCustomersAsync();
     }
 }

@@ -13,6 +13,7 @@ using WindowsFormsApp.Applications.CustomerService;
 using WindowsFormsApp.Domain.DapperRepository;
 using WindowsFormsApp.Infrastructure.DapperRepository;
 using WindowsFormsApp.Infrastructure.DBConnection;
+using WindowsFormsApp.Infrastructure.MyBatisRepository;
 
 namespace WindowsFormsApp
 {
@@ -36,9 +37,9 @@ namespace WindowsFormsApp
             ConfigureServices(serviceCollection, configuration);
 
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
-            var formStart = serviceProvider.GetRequiredService<MainForm>();
+            var mainForm = serviceProvider.GetRequiredService<MainForm>();
 
-            Application.Run(formStart);
+            Application.Run(mainForm);
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace WindowsFormsApp
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             // sample
-            services.AddSingleton<IStart, Start>();
+            //services.AddSingleton<IStart, Start>();
 
             // db config
             var dbConfig = configuration
@@ -56,11 +57,13 @@ namespace WindowsFormsApp
                 .Get<WinFormDbConnectionStringConfig>();
             services.AddSingleton<WinFormDbConnectionStringConfig>(dbConfig);
             
-            // Start Form
+            // Form
             services.AddSingleton<MainForm>();
+            services.AddTransient<DataGridForm>();  // SingletonだとDisposeされると次は使えないのでTransientにします
 
             // Repository
-            services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            //services.AddSingleton<ICustomerRepository, CustomerRepository>();
+            services.AddSingleton<ICustomerRepository, CustomerMyBatisRepository>();
 
             // Application Service
             services.AddSingleton<ICustomerService, CustomerService>();
@@ -75,18 +78,9 @@ namespace WindowsFormsApp
                 .AddJsonFile("appsettings.json")
                 .Build();
         }
+        
+
     }
 
-    public interface IStart
-    {
-        string Get();
-    }
 
-    public class Start : IStart
-    {
-        public string Get()
-        {
-            return "Start";
-        }
-    }
 }

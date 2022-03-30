@@ -7,28 +7,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Extensions.DependencyInjection;
 using WindowsFormsApp.Infrastructure.DBConnection;
 
 namespace WindowsFormsApp.AppForm
 {
     public partial class MainForm : Form
     {
-        private readonly IStart _start;
+        private readonly IServiceProvider _serviceProvider;
         private readonly WinFormDbConnectionStringConfig _dbConnectionString;
         private static MDIParent _mdiParent;
         private static DataGridForm _dataGridForm;
 
-        public MainForm(IStart start, WinFormDbConnectionStringConfig dbConnectionString)
+        public MainForm(WinFormDbConnectionStringConfig dbConnectionString, IServiceProvider serviceProvider)
         {
-            _start = start;
+
             _dbConnectionString = dbConnectionString;
+            _serviceProvider = serviceProvider;
             InitializeComponent();
         }
 
         private void btnShowMessage_Click(object sender, EventArgs e)
         {
-            var msg = _start.Get();
-            MessageBox.Show(msg + _dbConnectionString.SqlServerConnectionString);
+            MessageBox.Show(_dbConnectionString.SqlServerConnectionString);
         }
 
         private void btmShowMDI_Click(object sender, EventArgs e)
@@ -43,7 +44,7 @@ namespace WindowsFormsApp.AppForm
         private void btnShowDataGrid_Click(object sender, EventArgs e)
         {
             if (_dataGridForm == null || _dataGridForm.IsDisposed)
-                _dataGridForm = new DataGridForm();
+                _dataGridForm = _serviceProvider.GetRequiredService<DataGridForm>();
 
             _dataGridForm.Show();
             _dataGridForm.Activate();
