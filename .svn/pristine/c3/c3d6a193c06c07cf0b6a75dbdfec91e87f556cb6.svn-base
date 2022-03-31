@@ -1,6 +1,0 @@
-﻿// 接続文字列
-{
-  "WinFormDbConnectionStringConfig": {
-    "SqlServerConnectionString": "Data Source=localhost,1433;Initial Catalog=winformDb;Persist Security Info=False;User ID=sa;Password=aspMVC98;Pooling=False;MultipleActiveResultSets=True;Encrypt=False;TrustServerCertificate=False"
-  }
-}
